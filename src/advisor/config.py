@@ -3,18 +3,20 @@
 ACTION_STEPS = {
     "training": {
         "avg_training_bonus": 2.5,
+        "days_active_last_7_days": 1,
+        "days_active_last_28_days": 1,
     },
     "activity": {
         "days_active_last_7_days": 1,
         "days_active_last_28_days": 1,
     },
     "starting_11_quality": {
-        "avg_stars_top_11_players": 0.5,
-        "avg_stars_top_3_players": 0.2,
+        "avg_stars_top_11_players": 0.3,
+        "avg_stars_top_3_players": 0.1,
     },
     "star_player_quality": {
-        "avg_stars_top_3_players": 0.5,
-        "avg_stars_top_11_players": 0.15,
+        "avg_stars_top_3_players": 0.3,
+        "avg_stars_top_11_players": 0.1,
     },
 }
 
@@ -24,41 +26,46 @@ FEATURE_CAPS = {
     "days_active_last_28_days": 28.0,
 }
 
+RECENCY_RESET_ACTIONS = {
+    "training",
+    "activity",
+}
+
 ACTION_TEXT = {
     "training": {
-        "focus": "Raise training bonuses",
-        "focus_high": "Maximize training bonuses",
-        "why": "Strong training gives the Association a better foundation going into the matchup.",
-        "why_high": "Your matches carry extra weight for the Association, so strong training here is especially important.",
-        "action": "Complete training before the weekend and keep bonuses high before matches.",
+        "focus": "Complete training",
+        "focus_high": "Prioritize training now",
+        "why": "Training bonuses are one of the quickest ways to improve match readiness before the war.",
+        "why_high": "This manager's results count more for the Association, so missing training bonuses here can cost more.",
+        "action": "Have this manager complete training now and keep bonuses high before matches.",
     },
     "activity": {
-        "focus": "Stay active before the tournament",
-        "focus_high": "Protect match readiness",
-        "why": "Regular activity helps keep your team ready for weekend matches.",
-        "why_high": "Your matches carry extra weight for the Association, so staying ready before the weekend is especially important.",
-        "action": "Log in before the tournament and keep your team ready.",
+        "focus": "Ping this manager to log in",
+        "focus_high": "Urgent login reminder",
+        "why": "If this manager does not log in before the war, they may miss training, lineup checks, and final preparation.",
+        "why_high": "This manager's matches carry extra weight, so the clan should make sure they log in before the war.",
+        "action": "Ping this manager to log in before the war and check their team readiness.",
     },
     "starting_11_quality": {
-        "focus": "Improve your starting 11 over time",
-        "focus_high": "Strengthen your starting 11 over time",
-        "why": "A stronger starting 11 gives the Association more stability across the matchup.",
-        "why_high": "Your matches carry extra weight for the Association, so long-term squad strength matters more in this slot.",
-        "action": "Keep your team ready this weekend. Longer term, make upgrades to your starting 11.",
+        "focus": "Check starting 11",
+        "focus_high": "Prioritize starting 11 check",
+        "why": "The starting 11 decides most of the match strength, so a final lineup check can prevent avoidable weak spots.",
+        "why_high": "This manager's matches carry extra weight, so the starting 11 should be checked carefully before the war.",
+        "action": "Have this manager check the starting 11 and make any available upgrades before matches.",
     },
     "star_player_quality": {
-        "focus": "Improve your best players over time",
-        "focus_high": "Strengthen your key players over time",
-        "why": "Stronger key players can make important matches easier to control.",
-        "why_high": "Your matches carry extra weight for the Association, so stronger key players can be especially valuable over time.",
-        "action": "Keep your team ready this weekend. Longer term, prioritize upgrades to your strongest players.",
+        "focus": "Check key players",
+        "focus_high": "Prioritize key-player check",
+        "why": "Strong key players can make close matches easier to control, especially when the matchup is tight.",
+        "why_high": "This manager's matches carry extra weight, so their strongest players should be ready before the war.",
+        "action": "Have this manager check their strongest players and make any available upgrades before matches.",
     },
     "maintain": {
-        "focus": "Keep readiness steady",
-        "focus_high": "Protect match readiness",
-        "why": "Good tournament readiness is about consistency. Keep your team ready and avoid dropping form before the weekend.",
-        "why_high": "Your matches carry extra weight for the Association, so steady readiness is especially important.",
-        "action": "Stay active, complete normal training, and keep bonuses ready before the weekend.",
+        "focus": "No urgent action",
+        "focus_high": "Keep ready",
+        "why": "This manager already looks prepared enough, so the clan does not need to spend extra attention here.",
+        "why_high": "This manager's matches matter a lot, but their preparation already looks stable. Keep it that way.",
+        "action": "No urgent ping needed. Just keep normal training, bonuses, and lineup readiness in place.",
     },
 }
 

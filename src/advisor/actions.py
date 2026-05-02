@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from .config import ACTION_STEPS, FEATURE_CAPS
+from .config import ACTION_STEPS, FEATURE_CAPS, RECENCY_RESET_ACTIONS
 
 
 def apply_cap(series: pd.Series, col: str) -> pd.Series:
@@ -14,17 +14,19 @@ def apply_cap(series: pd.Series, col: str) -> pd.Series:
     return series
 
 
-def apply_manager_action(clan_members: pd.DataFrame, user_id: str, action: str) -> pd.DataFrame:
-    """Apply one candidate action to one manager.
+def apply_manager_action(
+    clan_members: pd.DataFrame,
+    user_id: str,
+    action: str,
+) -> pd.DataFrame:
 
-    Each action changes only the feature family represented by that action.
-    The activity action also resets recency because logging in is part of that action.
-    """
     df = clan_members.copy()
     mask = df["user_id"] == user_id
 
     if mask.sum() != 1:
-        raise ValueError(f"Expected exactly one manager with user_id={user_id}, found {mask.sum()}.")
+        raise ValueError(
+            f"Expected exactly one manager with user_id={user_id}, found {mask.sum()}."
+        )
 
     if action not in ACTION_STEPS:
         raise ValueError(f"Unknown action: {action}")
@@ -32,7 +34,7 @@ def apply_manager_action(clan_members: pd.DataFrame, user_id: str, action: str) 
     for col, delta in ACTION_STEPS[action].items():
         df.loc[mask, col] = apply_cap(df.loc[mask, col] + delta, col)
 
-    if action == "activity":
+    if action in RECENCY_RESET_ACTIONS:
         df.loc[mask, "days_since_last_active"] = 0
 
     return df

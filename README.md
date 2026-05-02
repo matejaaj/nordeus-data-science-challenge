@@ -99,7 +99,7 @@ The advisor is a manager-level preparation assistant built on top of the trained
 
 For every manager in both clans, it simulates a small set of possible actions, rebuilds the same matchup features, and checks which action most improves that manager's clan outlook according to the trained classifier.
 
-The internal simulations are not shown directly to players. The advisor translates them into natural preparation priorities, so the output does not ask managers to chase artificial numeric changes such as “+0.5 stars”; it instead gives practical guidance like improving readiness, keeping bonuses high, or strengthening the squad over time.
+The internal simulations are not shown directly to players. The advisor translates them into natural preparation priorities, so the output does not ask managers to chase artificial numeric changes such as “+0.3 stars”; it instead gives practical guidance like improving readiness, keeping bonuses high, or strengthening the squad over time.
 
 The recommendations should be read as model-estimated priorities for where attention may be most useful, not as guarantees that a specific action will change the match result.
 The actions and deltas were not picked randomly. I first inspected the distributions of the underlying manager features, then chose small, interpretable changes that are meaningful on the observed scale of the data. For example, `avg_training_bonus` ranges from 0 to 30 with a median around 10, so a `+2.5` bonus change is noticeable but not extreme. `days_active_last_7_days` is capped at 7, so the activity action adds one active day and respects the cap. Quality changes are smaller because star averages are continuous and move on a tighter scale.
@@ -108,10 +108,10 @@ The simulated actions are:
 
 | Action | Internal feature change | Player-facing meaning |
 |---|---|---|
-| Training | `avg_training_bonus + 2.5` | Raise training bonuses before the weekend |
-| Activity | `days_active_last_7_days + 1`, `days_active_last_28_days + 1` | Stay active before the tournament |
-| Starting 11 quality | `avg_stars_top_11_players + 0.5`, `avg_stars_top_3_players + 0.2` | Improve starting 11 quality over time |
-| Key player quality | `avg_stars_top_3_players + 0.5`, `avg_stars_top_11_players + 0.15` | Improve best players over time |
+| Training | `avg_training_bonus + 2.5`, `days_active_last_7_days + 1`, `days_active_last_28_days + 1`, `days_since_last_active = 0` | Have the manager complete training now and keep bonuses high before matches |
+| Activity | `days_active_last_7_days + 1`, `days_active_last_28_days + 1`, `days_since_last_active = 0` | Ping the manager to log in before the war and check team readiness |
+| Starting 11 quality | `avg_stars_top_11_players + 0.3`, `avg_stars_top_3_players + 0.1` | Have the manager check the starting 11 and make any available upgrades before matches |
+| Key player quality | `avg_stars_top_3_players + 0.3`, `avg_stars_top_11_players + 0.1` | Have the manager check their strongest players and make any available upgrades before matches |
 
 
 ## Example advisor output
@@ -128,39 +128,39 @@ CLAN clan_44207 — MANAGER ADVICE
 
 1. Manager user_154960
   Priority : High priority
-  Focus    : Maximize training bonuses
-  Action   : Complete training before the weekend and keep bonuses high before matches.
-  Why      : Your matches carry extra weight for the Association, so strong training here is especially important.
+  Focus    : Prioritize training now
+  Action   : Have this manager complete training now and keep bonuses high before matches.
+  Why      : This manager's results count more for the Association, so missing training bonuses here can cost more.
 
 2. Manager user_254405
   Priority : Moderate priority
-  Focus    : Protect match readiness
-  Action   : Stay active, complete normal training, and keep bonuses ready before the weekend.
-  Why      : Your matches carry extra weight for the Association, so steady readiness is especially important.
+  Focus    : Keep ready
+  Action   : No urgent ping needed. Just keep normal training, bonuses, and lineup readiness in place.
+  Why      : This manager's matches matter a lot, but their preparation already looks stable. Keep it that way.
 
 3. Manager user_254263
   Priority : Low priority
-  Focus    : Keep readiness steady
-  Action   : Stay active, complete normal training, and keep bonuses ready before the weekend.
-  Why      : Good tournament readiness is about consistency. Keep your team ready and avoid dropping form before the weekend.
+  Focus    : No urgent action
+  Action   : No urgent ping needed. Just keep normal training, bonuses, and lineup readiness in place.
+  Why      : This manager already looks prepared enough, so the clan does not need to spend extra attention here.
 
 4. Manager user_260099
   Priority : Low priority
-  Focus    : Keep readiness steady
-  Action   : Stay active, complete normal training, and keep bonuses ready before the weekend.
-  Why      : Good tournament readiness is about consistency. Keep your team ready and avoid dropping form before the weekend.
+  Focus    : No urgent action
+  Action   : No urgent ping needed. Just keep normal training, bonuses, and lineup readiness in place.
+  Why      : This manager already looks prepared enough, so the clan does not need to spend extra attention here.
 
 5. Manager user_171029
   Priority : Moderate priority
-  Focus    : Protect match readiness
-  Action   : Stay active, complete normal training, and keep bonuses ready before the weekend.
-  Why      : Your matches carry extra weight for the Association, so steady readiness is especially important.
+  Focus    : Keep ready
+  Action   : No urgent ping needed. Just keep normal training, bonuses, and lineup readiness in place.
+  Why      : This manager's matches matter a lot, but their preparation already looks stable. Keep it that way.
 
 6. Manager user_289677
   Priority : High priority
-  Focus    : Maximize bonuses now; strengthen starting 11 over time
-  Action   : Complete training before the weekend and keep bonuses high. Longer term, upgrade your starting 11.
-  Why      : Your matches carry extra weight for the Association, so strong training and steady progress here are especially important.
+  Focus    : Prioritize training now
+  Action   : Have this manager complete training now and keep bonuses high before matches.
+  Why      : This manager's results count more for the Association, so missing training bonuses here can cost more.
 
 --------------------------------------------------------------------------------------------
 
@@ -169,37 +169,37 @@ CLAN clan_43560 — MANAGER ADVICE
 
 1. Manager user_241110
   Priority : Moderate priority
-  Focus    : Raise training bonuses
-  Action   : Complete training before the weekend and keep bonuses high before matches.
-  Why      : Strong training gives the Association a better foundation going into the matchup.
+  Focus    : Complete training
+  Action   : Have this manager complete training now and keep bonuses high before matches.
+  Why      : Training bonuses are one of the quickest ways to improve match readiness before the war.
 
 2. Manager user_146867
   Priority : High priority
-  Focus    : Maximize bonuses now; strengthen starting 11 over time
-  Action   : Complete training before the weekend and keep bonuses high. Longer term, upgrade your starting 11.
-  Why      : Your matches carry extra weight for the Association, so strong training and steady progress here are especially important.
+  Focus    : Prioritize training now
+  Action   : Have this manager complete training now and keep bonuses high before matches.
+  Why      : This manager's results count more for the Association, so missing training bonuses here can cost more.
 
 3. Manager user_275817
-  Priority : High priority
-  Focus    : Strengthen your starting 11 over time
-  Action   : Keep your team ready this weekend. Longer term, make upgrades to your starting 11.
-  Why      : Your matches carry extra weight for the Association, so long-term squad strength matters more in this slot.
+  Priority : Moderate priority
+  Focus    : Keep ready
+  Action   : No urgent ping needed. Just keep normal training, bonuses, and lineup readiness in place.
+  Why      : This manager's matches matter a lot, but their preparation already looks stable. Keep it that way.
 
 4. Manager user_221196
-  Priority : High priority
-  Focus    : Strengthen your starting 11 over time
-  Action   : Keep your team ready this weekend. Longer term, make upgrades to your starting 11.
-  Why      : Your matches carry extra weight for the Association, so long-term squad strength matters more in this slot.
+  Priority : Moderate priority
+  Focus    : Keep ready
+  Action   : No urgent ping needed. Just keep normal training, bonuses, and lineup readiness in place.
+  Why      : This manager's matches matter a lot, but their preparation already looks stable. Keep it that way.
 
 5. Manager user_191370
   Priority : High priority
-  Focus    : Maximize training bonuses
-  Action   : Complete training before the weekend and keep bonuses high before matches.
-  Why      : Your matches carry extra weight for the Association, so strong training here is especially important.
+  Focus    : Prioritize training now
+  Action   : Have this manager complete training now and keep bonuses high before matches.
+  Why      : This manager's results count more for the Association, so missing training bonuses here can cost more.
 
 6. Manager user_286145
   Priority : High priority
-  Focus    : Maximize training bonuses
-  Action   : Complete training before the weekend and keep bonuses high before matches.
-  Why      : Your matches carry extra weight for the Association, so strong training here is especially important.
+  Focus    : Prioritize training now
+  Action   : Have this manager complete training now and keep bonuses high before matches.
+  Why      : This manager's results count more for the Association, so missing training bonuses here can cost more.
   ```
